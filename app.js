@@ -1,8 +1,8 @@
-/* KI-Strukturmodell-Labor v0.3.4
+/* KI-Strukturmodell-Labor v0.3.5
    Schlanke GitHub-Pages-Webapp mit 3Dmol.js und datengetriebener Struktur.
-   v0.3.4: behebt Syntaxfehler; lokale PDB-Dateien werden weiter mit Cache-Busting geladen. */
+   v0.3.5: vergrößerbarer Viewer und verbesserte Differenzmarkierung. */
 
-const APP_VERSION = "0.3.4";
+const APP_VERSION = "0.3.5";
 let examplesData = null;
 let currentExample = null;
 let currentView = "overlay";
@@ -13,6 +13,7 @@ let lastDiffResidues = [];
 let lastAlignmentStats = null;
 let viewerBackgroundMode = "dark";
 let representationMode = "cartoon";
+let viewerExpanded = false;
 const afdbCache = new Map();
 
 const els = {
@@ -23,6 +24,7 @@ const els = {
   status: document.getElementById("status"),
   viewerHint: document.getElementById("viewerHint"),
   reloadBtn: document.getElementById("reloadBtn"),
+  expandViewerBtn: document.getElementById("expandViewerBtn"),
   questions: document.getElementById("questions"),
   takeaway: document.getElementById("takeaway"),
   showPrediction: document.getElementById("showPrediction"),
@@ -78,6 +80,10 @@ function wireEvents() {
     loadCurrentExample();
   });
   els.reloadBtn.addEventListener("click", () => loadCurrentExample(true));
+  els.expandViewerBtn?.addEventListener("click", toggleViewerExpanded);
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && viewerExpanded) toggleViewerExpanded(false);
+  });
   els.pdbUpload.addEventListener("change", handleUpload);
   els.clearUploadBtn.addEventListener("click", () => {
     uploadedPdb = null;
@@ -254,7 +260,7 @@ async function loadCurrentExample(force = false) {
         predPdb = alignment.pdb;
         lastDiffResidues = alignment.diffResidues;
         lastAlignmentStats = alignment;
-        statusLines.push(`KI-Modell überlagert: ${alignment.pairCount} Cα-Paare; RMSD ≈ ${alignment.rmsd.toFixed(2)} Å; auffällige Bereiche: ${lastDiffResidues.length ? lastDiffResidues.join(", ") : "keine > " + (currentExample.differenceThreshold || 2.0) + " Å"}`);
+        statusLines.push(`KI-Modell überlagert: ${alignment.pairCount} Cα-Paare; RMSD ≈ ${alignment.rmsd.toFixed(2)} Å; auffällige Bereiche: ${lastDiffResidues.length ? lastDiffResidues.join(", ") : "keine > " + (currentExample.differenceThreshold || 2.0) + " Å"} (Cα-Abstandsschwelle)`);
       }
       const predModel = viewer.addModel(predPdb, "pdb");
       applyModelStyle(predModel, predStruct, "prediction");
@@ -282,7 +288,7 @@ async function loadCurrentExample(force = false) {
     }
   }
 
-  if (currentView === "differences" && els.showDifferenceResidues.checked) {
+  if ((currentView === "differences" || currentView === "overlay") && els.showDifferenceResidues.checked) {
     highlightDifferences();
   }
 
@@ -617,8 +623,79 @@ function buildHeteroStyle(color) {
 
 function highlightDifferences() {
   if (!lastDiffResidues.length || !loadedModels.prediction) return;
-  const style = buildRepresentationStyle("#D32F2F", 1.0);
-  loadedModels.prediction.model.setStyle({ hetflag: false, resi: lastDiffResidues }, style);
+
+  const pred = loadedModels.prediction.model;
+  const exp = loadedModels.experiment?.model;
+
+  // Didaktische Hervorhebung: rote Marker auf Cα-Atomen der stärker abweichenden
+  // Residuen. Die Grunddarstellung bleibt erhalten, damit das Overlay weiterhin
+  // lesbar bleibt. Falls addStyle im Browser/3Dmol nicht verfügbar ist, wird auf
+  // setStyle zurückgefallen.
+  const predMarker = {
+    sphere: { color: "#D32F2F", scale: 0.62, opacity: 0.92 },
+    stick: { color: "#D32F2F", radius: 0.22, opacity: 0.95 }
+  };
+  const expMarker = {
+    sphere: { color: "#1565C0", scale: 0.46, opacity: 0.75 }
+  };
+
+  if (typeof pred.addStyle === "function") {
+    pred.addStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, predMarker);
+  } else {
+    pred.setStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, predMarker);
+  }
+
+  // Im Overlay hilft ein kleiner Gegenmarker am Experiment, um zu sehen,
+  // welche Stellen verglichen wurden.
+  if (exp) {
+    if (typeof exp.addStyle === "function") {
+      exp.addStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, expMarker);
+    } else {
+      exp.setStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, expMarker);
+    }
+  }
+
+  // Maximal einige Residuen beschriften, damit die Anzeige nicht überladen wird.
+  const labelResidues = lastDiffResidues.slice(0, 10);
+  addResidueLabels(loadedModels.prediction.pdb, labelResidues, "#D32F2F");
+}
+
+
+function toggleViewerExpanded(forceState = null) {
+  viewerExpanded = typeof forceState === "boolean" ? forceState : !viewerExpanded;
+  const panel = document.querySelector(".viewer-panel");
+  panel?.classList.toggle("viewer-expanded", viewerExpanded);
+  document.body.classList.toggle("viewer-expanded-active", viewerExpanded);
+  if (els.expandViewerBtn) els.expandViewerBtn.textContent = viewerExpanded ? "Viewer verkleinern" : "Viewer vergrößern";
+  setTimeout(() => {
+    if (viewer && typeof viewer.resize === "function") viewer.resize();
+    if (viewer) viewer.render();
+  }, 80);
+}
+
+function addResidueLabels(pdb, residues, color = "#D32F2F") {
+  if (!viewer || !residues?.length) return;
+  const coords = getCaCoordsForResidues(pdb, residues);
+  for (const item of coords) {
+    viewer.addLabel(String(item.resi), {
+      position: { x: item.x, y: item.y, z: item.z },
+      backgroundColor: "white",
+      fontColor: color,
+      fontSize: 11,
+      borderThickness: 1,
+      borderColor: color,
+      inFront: true
+    });
+  }
+}
+
+function getCaCoordsForResidues(pdb, residues) {
+  const wanted = new Set(residues.map(Number));
+  const out = [];
+  for (const a of parseAtoms(pdb)) {
+    if (a.atom === "CA" && wanted.has(a.resi) && Number.isFinite(a.x)) out.push(a);
+  }
+  return out;
 }
 
 function handleUpload(event) {

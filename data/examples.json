@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "KI-Strukturmodell-Labor",
-    "version": "0.3.4",
-    "description": "Version 0.3.4 behebt einen JavaScript-Syntaxfehler aus v0.3.3. Cache-Busting und Diagnose für lokale PDB-Dateien bleiben erhalten.",
+    "version": "0.3.5",
+    "description": "Version 0.3.5 ergänzt einen vergrößerbaren Viewer und verbessert die Markierung abweichender Bereiche im Overlay-/Unterschiede-Modus.",
     "model_note": "Die App lädt KI-Modelle nicht mehr über fragilen Remote-AFDB-Dateilink. Für Trp-cage und Ubiquitin sind lokale Pfade vorbereitet; die PDB-Dateien werden nach dem ColabFold-Lauf in structures/ abgelegt."
   },
   "examples": [
@@ -82,7 +82,8 @@
       ],
       "model_limit": "Trp-cage ist sehr klein und wurde experimentell als NMR-Ensemble bestimmt. Das aktuell angezeigte Modell ist daher nur ein Vertreter eines beweglichen Strukturensembles, nicht die eine endgültige Peptidform.",
       "protocol_focus": "Mini-Protein: Experiment und KI-Modell werden lokal vergleichbar; das selbst erzeugte ColabFold-Modell kann später importiert werden.",
-      "colab_url": "https://colab.research.google.com/github/ekerzendorfer/KI_STRUKTURMODELL_LAB/blob/main/colab/colabfold_template.ipynb"
+      "colab_url": "https://colab.research.google.com/github/ekerzendorfer/KI_STRUKTURMODELL_LAB/blob/main/colab/colabfold_template.ipynb",
+      "differenceThreshold": 2.0
     },
     {
       "id": "ubiquitin",
@@ -202,7 +203,8 @@
         "Formuliere, warum eine Sequenz allein nicht automatisch alle Zustände eines Proteins beschreibt."
       ],
       "model_limit": "Calmodulin ist zustandsabhängig. Ein AF2/ColabFold-Modell aus der Sequenz allein beschreibt nicht automatisch den Ca²⁺-gebundenen Zustand. AF3 kann zusätzlichen Kontext berücksichtigen, bleibt aber ebenfalls ein Modell.",
-      "protocol_focus": "Zustandsabhängigkeit: Proteinstruktur hängt von Ionen, Liganden und biologischem Kontext ab."
+      "protocol_focus": "Zustandsabhängigkeit: Proteinstruktur hängt von Ionen, Liganden und biologischem Kontext ab.",
+      "differenceThreshold": 2.0
     }
   ]
 }

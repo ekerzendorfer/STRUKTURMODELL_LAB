@@ -245,3 +245,59 @@ code { background: #eef0f7; border-radius: 6px; padding: 1px 5px; }
   color: var(--muted);
   font-size: .92rem;
 }
+
+
+.viewer-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.viewer-panel.viewer-expanded {
+  position: fixed;
+  inset: 14px;
+  z-index: 9999;
+  overflow: auto;
+  max-width: none;
+  border-radius: 20px;
+  padding: 18px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+body.viewer-expanded-active {
+  overflow: hidden;
+}
+
+.viewer-panel.viewer-expanded #viewerShell.mol-viewer-shell {
+  height: min(78vh, 820px) !important;
+  min-height: 560px !important;
+}
+
+.viewer-panel.viewer-expanded .viewer-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--panel);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.diff-note {
+  display: inline-block;
+  margin-left: 8px;
+  color: #b71c1c;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .viewer-panel.viewer-expanded {
+    inset: 6px;
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .viewer-panel.viewer-expanded #viewerShell.mol-viewer-shell {
+    min-height: 440px !important;
+    height: 68vh !important;
+  }
+}

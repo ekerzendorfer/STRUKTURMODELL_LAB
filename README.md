@@ -1,4 +1,4 @@
-# KI-Strukturmodell-Labor v0.3.4
+# KI-Strukturmodell-Labor v0.3.5
 
 Mini-Tool zum Vergleich von KI-Strukturmodellen und experimentellen Proteinstrukturen.
 
@@ -9,7 +9,7 @@ Mini-Tool zum Vergleich von KI-Strukturmodellen und experimentellen Proteinstruk
 Die Website bleibt die stabile Vergleichsumgebung.  
 ColabFold wird bewusst als externer Vertiefungsweg genutzt.
 
-## Neu in v0.3.4
+## Neu in v0.3.5
 
 - JavaScript-Syntaxfehler aus v0.3.3 behoben
 - lokale PDB-Dateien werden mit Cache-Busting geladen, damit nachträglich hochgeladene Strukturen nicht durch alte 404-Caches blockiert werden
@@ -77,3 +77,16 @@ https://ekerzendorfer.github.io/KI_STRUKTURMODELL_LAB/structures/ubiquitin/af2_c
 Die ersten sichtbaren Zeilen sollten typische PDB-Zeilen enthalten, z. B. `MODEL`, `ATOM`, `HETATM`, `TER` oder `END`.
 
 Wenn die Datei im GitHub-Repo sichtbar ist, aber über GitHub Pages noch nicht erreichbar ist, hilft meist ein kurzer Moment Warten, bis Pages neu deployed ist. Danach im Browser Strg+F5 ausführen.
+
+
+## Neu in v0.3.5
+
+- Button **Viewer vergrößern / Viewer verkleinern**
+- vergrößerter Viewer als Overlay über der Seite
+- Taste **Esc** schließt die vergrößerte Ansicht
+- abweichende Bereiche werden im Overlay-/Unterschiede-Modus sichtbarer markiert
+- rote Marker: stärker abweichende Cα-Positionen im KI-Modell
+- blaue Gegenmarker: entsprechende Positionen in der experimentellen Struktur
+- die ersten auffälligen Residuen werden direkt im Viewer beschriftet
+
+Die Differenzmarkierung ist eine didaktische Näherung auf Basis gemeinsamer Cα-Atome und einer Abstandsschwelle, nicht eine vollständige strukturbioinformatische Analyse.
