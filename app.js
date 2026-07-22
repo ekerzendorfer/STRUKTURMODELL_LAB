@@ -1,8 +1,8 @@
-/* KI-Strukturmodell-Labor v0.3.0
+/* KI-Strukturmodell-Labor v0.3.1
    Schlanke GitHub-Pages-Webapp mit 3Dmol.js und datengetriebener Struktur.
-   v0.3.0: ergänzt Beobachtungsauftrag, Modellgrenze und kopierbaren Protokolltext. */
+   v0.3.1: bereitet lokale PDB-Dateien für Standardvergleiche und externe ColabFold-Erzeugung vor. */
 
-const APP_VERSION = "0.3.0";
+const APP_VERSION = "0.3.1";
 let examplesData = null;
 let currentExample = null;
 let currentView = "overlay";
@@ -124,11 +124,13 @@ function selectExample(id) {
 function renderExampleInfo(ex) {
   const sources = (ex.sources || []).map(s => `<li><a href="${escapeAttr(s.url)}" target="_blank" rel="noopener">${escapeHtml(s.label)}</a></li>`).join("");
   const localNote = ex.local_note ? `<p class="soft-note">${escapeHtml(ex.local_note)}</p>` : "";
+  const colabLink = ex.colab_url ? `<p class="tool-link-row"><a class="tool-link" href="${escapeAttr(ex.colab_url)}" target="_blank" rel="noopener">ColabFold-Notebook öffnen</a><span class="tool-link-note">optional: KI-Modell selbst erzeugen und als PDB importieren</span></p>` : "";
   els.info.innerHTML = `
     <h2>2. Leitfrage: ${escapeHtml(ex.title)}</h2>
     <p>${escapeHtml(ex.intro || "")}</p>
     <p class="core">${escapeHtml(ex.core_message || "")}</p>
     ${ex.sequence ? `<p><strong>Sequenz:</strong> <code>${escapeHtml(ex.sequence)}</code></p>` : ""}
+    ${colabLink}
     ${localNote}
     ${sources ? `<details><summary>Quellen / Struktur-IDs</summary><ul>${sources}</ul></details>` : ""}
   `;
@@ -398,6 +400,14 @@ function showEmptyViewerNotice() {
 
 async function loadStructureText(struct) {
   if (struct.source === "placeholder") throw new Error(struct.note || "Struktur noch nicht hinterlegt.");
+
+  if (struct.source === "local_optional") {
+    try {
+      return await fetchTextWithFallback([struct.file].filter(Boolean));
+    } catch (err) {
+      throw new Error(struct.missingFileHint || `${struct.file || "Lokale Datei"} nicht gefunden. Erzeuge die PDB-Datei extern und lege sie im Repo ab.`);
+    }
+  }
 
   if (struct.source === "local") {
     return await fetchTextWithFallback([struct.file, struct.url, struct.fallbackUrl].filter(Boolean));

@@ -223,3 +223,25 @@ code { background: #eef0f7; border-radius: 6px; padding: 1px 5px; }
   outline: 2px solid #c5cae9;
   border-color: var(--accent);
 }
+
+
+.tool-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 12px;
+}
+.tool-link {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.tool-link-note {
+  color: var(--muted);
+  font-size: .92rem;
+}

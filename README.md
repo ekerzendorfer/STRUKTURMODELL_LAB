@@ -1,53 +1,57 @@
-# KI-Strukturmodell-Labor v0.3.0
+# KI-Strukturmodell-Labor v0.3.1
 
 Mini-Tool zum Vergleich von KI-Strukturmodellen und experimentellen Proteinstrukturen.
 
-## Neu in v0.3.0
+## Didaktischer Kern
 
-- Beobachtungsauftrag pro Beispiel
-- Modellgrenze pro Beispiel
-- Button **Protokolltext erzeugen**
-- Button **Protokolltext kopieren**
-- Viewer-Optionen aus v0.2.5 bleiben erhalten:
-  - dunkler / hellgrauer Hintergrund
-  - Cartoon, Bänder + Seitenketten, Rückgrat-Stäbchen, Stäbchen, Linien, Kalotten / Spacefill
-  - atomnahe Darstellungen mit Jmol/CPK-Elementfarben
+> Sequenz → KI-Strukturmodell → experimentelle Struktur → Overlay → Modellgrenzen verstehen
 
-## Enthaltene Beispiele
+Die Website bleibt die stabile Vergleichsumgebung.  
+ColabFold wird bewusst als externer Vertiefungsweg genutzt.
 
-- Trp-cage: experimentelle NMR-Struktur 1L2Y, Einstieg / Mini-Protein
-- Ubiquitin: experimentelle Struktur 1UBQ, Referenzprotein für späteren KI-Modellvergleich
-- Calmodulin: als spätere Erweiterung für Ca²⁺, Zustandsabhängigkeit und optionales AF3-Modell vorbereitet
+## Neu in v0.3.1
 
-## Aktueller technischer Status
+- lokale Strukturpfade für den Standardmodus vorbereitet
+- experimentelle Strukturen können lokal liegen und fallen sonst auf RCSB zurück
+- KI-Modelle werden als lokale, kuratierte ColabFold-PDB-Dateien erwartet
+- Beispielseiten enthalten einen Link zum ColabFold-Template
+- `structures/`-Ordner mit Zielpfaden angelegt
+- ColabFold-Template erklärt den Workflow: Faltung extern erzeugen, PDB importieren oder ins Repo übernehmen
 
-Die experimentellen Strukturen werden in dieser Version weiterhin remote von RCSB geladen. KI-Modelle werden vorerst per Upload getestet oder später als lokale, kuratierte PDB-Dateien ergänzt.
-
-AlphaFold3 wird nicht angebunden. Ein AF3-Calmodulin-Modell kann später als manuell erzeugte, kuratierte Zusatzstruktur eingebunden werden.
-
-## Repo-Struktur
+## Erwartete Strukturdateien
 
 ```text
-KI_STRUKTURMODELL_LAB/
-├── index.html
-├── app.js
-├── style.css
-├── data/
-│   └── examples.json
-└── colab/
-    └── colabfold_template.ipynb
+structures/trp_cage/experimental.pdb
+structures/trp_cage/af2_colabfold.pdb
+
+structures/ubiquitin/experimental.pdb
+structures/ubiquitin/af2_colabfold.pdb
 ```
 
-## Lokaler Test
+In v0.3.1 müssen die AF2-Dateien noch durch einen ColabFold-Lauf erzeugt und ins Repo gelegt werden.
 
-Bitte nicht per Doppelklick öffnen, sondern im Projektordner starten:
+## Workflow für den Unterricht
 
-```bash
-python -m http.server 8000
-```
+1. Webtool öffnen.
+2. Beispiel auswählen.
+3. Experimentelle Struktur betrachten.
+4. Falls ein lokales KI-Modell vorhanden ist: Overlay mit Experiment betrachten.
+5. Optional ColabFold-Notebook öffnen.
+6. Modell selbst erzeugen.
+7. PDB über **Eigenes PDB testen** importieren.
+8. Vergleich und Modellgrenzen im Protokolltext sichern.
 
-Dann öffnen:
+## GitHub Pages
+
+Die Dateien müssen im Root des Repos liegen:
 
 ```text
-http://localhost:8000
+index.html
+app.js
+style.css
+data/examples.json
+structures/
+colab/
 ```
+
+Danach GitHub Pages auf `main` und `/root` stellen.
