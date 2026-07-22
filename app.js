@@ -1,8 +1,8 @@
-/* KI-Strukturmodell-Labor v0.3.5
+/* KI-Strukturmodell-Labor v0.3.6
    Schlanke GitHub-Pages-Webapp mit 3Dmol.js und datengetriebener Struktur.
-   v0.3.5: vergrößerbarer Viewer und verbesserte Differenzmarkierung. */
+   v0.3.6: dezente Differenzmarkierung ohne Kugelmarker. */
 
-const APP_VERSION = "0.3.5";
+const APP_VERSION = "0.3.6";
 let examplesData = null;
 let currentExample = null;
 let currentView = "overlay";
@@ -625,41 +625,34 @@ function highlightDifferences() {
   if (!lastDiffResidues.length || !loadedModels.prediction) return;
 
   const pred = loadedModels.prediction.model;
-  const exp = loadedModels.experiment?.model;
 
-  // Didaktische Hervorhebung: rote Marker auf Cα-Atomen der stärker abweichenden
-  // Residuen. Die Grunddarstellung bleibt erhalten, damit das Overlay weiterhin
-  // lesbar bleibt. Falls addStyle im Browser/3Dmol nicht verfügbar ist, wird auf
-  // setStyle zurückgefallen.
-  const predMarker = {
-    sphere: { color: "#D32F2F", scale: 0.62, opacity: 0.92 },
-    stick: { color: "#D32F2F", radius: 0.22, opacity: 0.95 }
+  // Keine Kugelmarker mehr: Die abweichenden Abschnitte werden als farbige
+  // Cartoon-/Rückgratsegmente über die bestehende Banddarstellung gelegt.
+  // Dadurch bleibt das Gesamtbild des Overlays deutlich ruhiger.
+  const diffRibbon = {
+    cartoon: {
+      color: "#D84315",
+      opacity: 0.96,
+      thickness: 0.72,
+      arrows: true
+    }
   };
-  const expMarker = {
-    sphere: { color: "#1565C0", scale: 0.46, opacity: 0.75 }
+
+  const diffBackbone = {
+    stick: {
+      color: "#BF360C",
+      radius: 0.10,
+      opacity: 0.70
+    }
   };
 
   if (typeof pred.addStyle === "function") {
-    pred.addStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, predMarker);
+    pred.addStyle({ hetflag: false, resi: lastDiffResidues }, diffRibbon);
+    pred.addStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, diffBackbone);
   } else {
-    pred.setStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, predMarker);
+    pred.setStyle({ hetflag: false, resi: lastDiffResidues }, diffRibbon);
   }
-
-  // Im Overlay hilft ein kleiner Gegenmarker am Experiment, um zu sehen,
-  // welche Stellen verglichen wurden.
-  if (exp) {
-    if (typeof exp.addStyle === "function") {
-      exp.addStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, expMarker);
-    } else {
-      exp.setStyle({ hetflag: false, atom: "CA", resi: lastDiffResidues }, expMarker);
-    }
-  }
-
-  // Maximal einige Residuen beschriften, damit die Anzeige nicht überladen wird.
-  const labelResidues = lastDiffResidues.slice(0, 10);
-  addResidueLabels(loadedModels.prediction.pdb, labelResidues, "#D32F2F");
 }
-
 
 function toggleViewerExpanded(forceState = null) {
   viewerExpanded = typeof forceState === "boolean" ? forceState : !viewerExpanded;

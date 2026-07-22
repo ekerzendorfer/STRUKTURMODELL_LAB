@@ -1,4 +1,4 @@
-# KI-Strukturmodell-Labor v0.3.5
+# KI-Strukturmodell-Labor v0.3.6
 
 Mini-Tool zum Vergleich von KI-Strukturmodellen und experimentellen Proteinstrukturen.
 
@@ -90,3 +90,11 @@ Wenn die Datei im GitHub-Repo sichtbar ist, aber über GitHub Pages noch nicht e
 - die ersten auffälligen Residuen werden direkt im Viewer beschriftet
 
 Die Differenzmarkierung ist eine didaktische Näherung auf Basis gemeinsamer Cα-Atome und einer Abstandsschwelle, nicht eine vollständige strukturbioinformatische Analyse.
+
+
+## Neu in v0.3.6
+
+- störende Kugelmarker der Differenzanzeige entfernt
+- abweichende Bereiche werden stattdessen als rote/orange Bandabschnitte im KI-Modell hervorgehoben
+- dadurch bleibt der Gesamteindruck des Overlays besser erhalten
+- die Markierung bleibt eine didaktische Näherung auf Basis gemeinsamer Cα-Positionen und einer Abstandsschwelle

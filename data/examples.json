@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "KI-Strukturmodell-Labor",
-    "version": "0.3.5",
-    "description": "Version 0.3.5 ergänzt einen vergrößerbaren Viewer und verbessert die Markierung abweichender Bereiche im Overlay-/Unterschiede-Modus.",
+    "version": "0.3.6",
+    "description": "Version 0.3.6 ersetzt die Kugel-/Label-Markierung der abweichenden Bereiche durch eine dezente farbige Bänder-/Cartoon-Hervorhebung.",
     "model_note": "Die App lädt KI-Modelle nicht mehr über fragilen Remote-AFDB-Dateilink. Für Trp-cage und Ubiquitin sind lokale Pfade vorbereitet; die PDB-Dateien werden nach dem ColabFold-Lauf in structures/ abgelegt."
   },
   "examples": [
