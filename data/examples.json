@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "title": "KI-Strukturmodell-Labor",
+    "version": "0.1.0",
+    "description": "Vergleich von KI-Strukturmodellen und experimentellen Proteinstrukturen. Version 0.1 legt die erweiterbare Architektur und die Viewer-Logik an.",
+    "model_note": "Die Website lädt Strukturdateien aus öffentlich zugänglichen Quellen oder später aus lokalen Repo-Dateien. Für den Unterricht sollen die wichtigsten Overlays langfristig als vorbereitete, vor-ausgerichtete PDB-Dateien im Repo liegen."
+  },
+  "examples": [
+    {
+      "id": "trp_cage",
+      "title": "Trp-cage",
+      "subtitle": "Mini-Protein / Peptid – Einstieg",
+      "level": "Einstieg / SEK1–SEK2",
+      "status": "v0.1: Experimentelles NMR-Beispiel aktiv; ColabFold-Modell später ergänzen",
+      "core_message": "Schon eine kurze Aminosäuresequenz kann eine erkennbare 3D-Struktur ausbilden. Gleichzeitig bleiben kleine Peptide bewegliche Systeme.",
+      "intro": "Trp-cage ist ein sehr kleines Miniprotein mit nur 20 Aminosäuren. Es eignet sich als niederschwelliger Einstieg in die Frage, wie aus einer Sequenz eine räumliche Struktur entstehen kann.",
+      "sequence": "NLYIQWLKDGGPSSGRPPPS",
+      "structures": [
+        {
+          "id": "experiment",
+          "label": "Experiment: Trp-cage NMR-Struktur 1L2Y",
+          "role": "experiment",
+          "source": "remote",
+          "url": "https://files.rcsb.org/download/1L2Y.pdb",
+          "pdb_id": "1L2Y",
+          "modelNumber": 1,
+          "chain": "A",
+          "style": "cartoon",
+          "color": "#2E7D32",
+          "visibleByDefault": true,
+          "note": "NMR-Struktur, Modell 1 aus dem Ensemble."
+        },
+        {
+          "id": "prediction",
+          "label": "KI-Modell: späteres ColabFold-Modell",
+          "role": "prediction",
+          "source": "placeholder",
+          "visibleByDefault": false,
+          "disabled": true,
+          "note": "Für v0.1 noch nicht hinterlegt. Das Beispiel bleibt als Einstieg bewusst angelegt; das ColabFold-Modell kann in einer späteren Version ergänzt oder über Upload getestet werden."
+        }
+      ],
+      "views": {
+        "prediction": false,
+        "experiment": true,
+        "overlay": false,
+        "differences": false,
+        "upload": true
+      },
+      "questions": [
+        "Wie kann aus nur 20 Aminosäuren eine erkennbare räumliche Struktur entstehen?",
+        "Welche Bereiche wirken geordnet, welche eher flexibel?",
+        "Warum ist ein kleines Peptid ein gutes Beispiel für Modellgrenzen?"
+      ],
+      "takeaway": "Trp-cage zeigt, dass bereits kurze Sequenzen Struktur ausbilden können. Gerade bei kleinen Peptiden ist aber wichtig: Eine Struktur ist oft nur ein Ausschnitt aus einem beweglichen Ensemble.",
+      "sources": [
+        {
+          "label": "RCSB PDB 1L2Y",
+          "url": "https://www.rcsb.org/structure/1L2Y"
+        }
+      ],
+      "future": {
+        "colabfold_model": true,
+        "local_pdb_upload": true,
+        "nmr_ensemble_view": true
+      }
+    },
+    {
+      "id": "ubiquitin",
+      "title": "Ubiquitin",
+      "subtitle": "Referenzprotein – KI-Modell vs. Experiment",
+      "level": "SEK2 / Einstieg in Modellvergleich",
+      "status": "v0.1: Remote-Experiment + AlphaFold-DB-Modell; automatische CA-Überlagerung im Browser",
+      "core_message": "Bei einem kleinen, stabil gefalteten Protein kann das KI-Modell der experimentellen Struktur sehr ähnlich sein. Das Experiment zeigt dennoch konkrete Messdetails und flexible Bereiche.",
+      "intro": "Ubiquitin ist ein kleines, gut untersuchtes Protein mit 76 Aminosäuren. Es eignet sich sehr gut als erstes robustes Vergleichsbeispiel zwischen KI-Vorhersage und experimenteller Struktur.",
+      "sequence": "MQIFVKTLTGKTITLEVEPSDTIENVKAKIQDKEGIPPDQQRLIFAGKQLEDGRTLSDYNIQKESTLHLVLRLRGG",
+      "structures": [
+        {
+          "id": "experiment",
+          "label": "Experiment: Ubiquitin 1UBQ",
+          "role": "experiment",
+          "source": "remote",
+          "url": "https://files.rcsb.org/download/1UBQ.pdb",
+          "pdb_id": "1UBQ",
+          "chain": "A",
+          "style": "cartoon",
+          "color": "#2E7D32",
+          "visibleByDefault": true,
+          "note": "Kristallstruktur von humanem Ubiquitin, 76 Aminosäuren."
+        },
+        {
+          "id": "prediction",
+          "label": "KI-Modell: AlphaFold DB P62988, Residuen 1–76",
+          "role": "prediction",
+          "source": "remote",
+          "url": "https://alphafold.ebi.ac.uk/files/AF-P62988-F1-model_v6.pdb",
+          "fallbackUrl": "https://alphafold.ebi.ac.uk/files/AF-P62988-F1-model_v4.pdb",
+          "uniprot": "P62988",
+          "chain": "A",
+          "residueRange": [1, 76],
+          "alignTo": "experiment",
+          "style": "cartoon",
+          "color": "#EF6C00",
+          "visibleByDefault": true,
+          "note": "P62988 ist ein Ubiquitin-Fusionsprotein; für den Vergleich werden nur die ersten 76 Aminosäuren verwendet."
+        }
+      ],
+      "views": {
+        "prediction": true,
+        "experiment": true,
+        "overlay": true,
+        "differences": true,
+        "upload": true
+      },
+      "questions": [
+        "Wie gut stimmt die Grundfaltung des KI-Modells mit der experimentellen Struktur überein?",
+        "Wo sieht man kleine Unterschiede oder flexible Bereiche?",
+        "Welche Information liefert das Experiment zusätzlich zur Vorhersage?"
+      ],
+      "takeaway": "Ubiquitin zeigt die Stärke von AlphaFold-Modellen: Die Grundfaltung kann sehr gut getroffen werden. Gleichzeitig bleibt die experimentelle Struktur der Bezugspunkt für konkrete Zustände und Details.",
+      "sources": [
+        {
+          "label": "RCSB PDB 1UBQ",
+          "url": "https://www.rcsb.org/structure/1UBQ"
+        },
+        {
+          "label": "AlphaFold DB: P62988",
+          "url": "https://alphafold.com/entry/AF-P62988-F1"
+        }
+      ],
+      "future": {
+        "nmr_ensemble": true,
+        "prepared_local_structures": true,
+        "rmsd_display": true
+      }
+    },
+    {
+      "id": "calmodulin",
+      "title": "Calmodulin",
+      "subtitle": "später: Zustand, Ca²⁺ und AF3-Zusatzmodell",
+      "level": "Fortgeschritten / Fortbildung",
+      "status": "geplant für v0.2/v0.3",
+      "core_message": "Proteinstruktur ist zustandsabhängig. Ca²⁺-Bindung verändert den biologisch relevanten Zustand.",
+      "intro": "Calmodulin wird später als Beispiel für Zustandsabhängigkeit ergänzt: ColabFold/AF2 aus der Sequenz, experimentelle Ca²⁺-Struktur und optional ein manuell erzeugtes AF3-Modell mit Calcium.",
+      "structures": [],
+      "views": {
+        "prediction": false,
+        "experiment": false,
+        "overlay": false,
+        "differences": false,
+        "af3": true,
+        "video": true
+      },
+      "questions": [
+        "Warum beschreibt ein Sequenzmodell nicht automatisch den Ca²⁺-gebundenen Zustand?",
+        "Welche Information liefern Calcium-Ionen und experimentelle Strukturen zusätzlich?",
+        "Was könnte ein AF3-Modell gegenüber AF2/ColabFold ergänzen?"
+      ],
+      "takeaway": "Calmodulin wird das zentrale Beispiel für den Unterschied zwischen Sequenzmodell, gebundenem Zustand und experimenteller Struktur.",
+      "future": {
+        "af2_colabfold_model": true,
+        "experimental_ca_bound_structure": true,
+        "af3_ca_model": true,
+        "video_link": true
+      }
+    }
+  ]
+}
