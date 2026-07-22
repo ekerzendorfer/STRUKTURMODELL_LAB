@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "KI-Strukturmodell-Labor",
-    "version": "0.3.3",
-    "description": "Version 0.3.3 ergänzt Cache-Busting und robustere Diagnose für lokale PDB-Dateien. Lokale KI-Modelle werden weiterhin unter structures/<beispiel>/af2_colabfold.pdb erwartet.",
+    "version": "0.3.4",
+    "description": "Version 0.3.4 behebt einen JavaScript-Syntaxfehler aus v0.3.3. Cache-Busting und Diagnose für lokale PDB-Dateien bleiben erhalten.",
     "model_note": "Die App lädt KI-Modelle nicht mehr über fragilen Remote-AFDB-Dateilink. Für Trp-cage und Ubiquitin sind lokale Pfade vorbereitet; die PDB-Dateien werden nach dem ColabFold-Lauf in structures/ abgelegt."
   },
   "examples": [

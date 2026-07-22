@@ -1,4 +1,4 @@
-# KI-Strukturmodell-Labor v0.3.3
+# KI-Strukturmodell-Labor v0.3.4
 
 Mini-Tool zum Vergleich von KI-Strukturmodellen und experimentellen Proteinstrukturen.
 
@@ -9,8 +9,9 @@ Mini-Tool zum Vergleich von KI-Strukturmodellen und experimentellen Proteinstruk
 Die Website bleibt die stabile Vergleichsumgebung.  
 ColabFold wird bewusst als externer Vertiefungsweg genutzt.
 
-## Neu in v0.3.3
+## Neu in v0.3.4
 
+- JavaScript-Syntaxfehler aus v0.3.3 behoben
 - lokale PDB-Dateien werden mit Cache-Busting geladen, damit nachträglich hochgeladene Strukturen nicht durch alte 404-Caches blockiert werden
 - bessere Diagnose, falls eine Datei zwar geladen wird, aber keine erkennbaren PDB-Zeilen enthält
 - lokale Strukturpfade für den Standardmodus vorbereitet

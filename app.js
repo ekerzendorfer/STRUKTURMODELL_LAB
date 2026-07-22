@@ -1,8 +1,8 @@
-/* KI-Strukturmodell-Labor v0.3.3
+/* KI-Strukturmodell-Labor v0.3.4
    Schlanke GitHub-Pages-Webapp mit 3Dmol.js und datengetriebener Struktur.
-   v0.3.3: lädt lokale PDB-Dateien mit Cache-Busting und besserer Diagnose. */
+   v0.3.4: behebt Syntaxfehler; lokale PDB-Dateien werden weiter mit Cache-Busting geladen. */
 
-const APP_VERSION = "0.3.3";
+const APP_VERSION = "0.3.4";
 let examplesData = null;
 let currentExample = null;
 let currentView = "overlay";
@@ -429,8 +429,7 @@ function withCacheBuster(url) {
 
 function looksLikePdb(text) {
   if (!text) return false;
-  return /(^|
-)(ATOM  |HETATM|MODEL |HEADER|TITLE )/.test(text);
+  return /(^|\n)(ATOM  |HETATM|MODEL |HEADER|TITLE )/.test(text);
 }
 
 async function fetchTextWithFallback(urls) {
