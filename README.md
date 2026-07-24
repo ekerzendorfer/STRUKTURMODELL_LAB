@@ -1,15 +1,16 @@
-# KI-Strukturmodell-Labor v0.4.1
+# KI-Strukturmodell-Labor v0.5.0
 
 Schlanke GitHub-Pages-Webapp zum Vergleich von KI-Proteinstrukturmodellen mit experimentellen Referenzstrukturen.
 
-## Neu in v0.4.1
+## Neu in v0.5.0
 
-- Optionale **didaktische Störmodelle** ergänzt.
-- Erwarteter Dateiname pro Beispiel: `didactic_decoy.pdb`.
-- Fehlt diese Datei, entsteht kein Fehler: Die App zeigt nur einen Hinweis.
-- Der Umschalter heißt nun **KI-/Vergleichsmodell**.
-- Das Störmodell wird ausdrücklich als **kein AlphaFold/ColabFold-Ergebnis** gekennzeichnet.
-- Viewer-Großansicht bleibt unverändert.
+- Drittes Beispiel ergänzt: **Calmodulin**.
+- Didaktischer Schwerpunkt: **Sequenzmodell vs. Ca²⁺-gebundener experimenteller Zustand**.
+- Lokale experimentelle Calmodulin-Datei erwartet unter `structures/calmodulin/experimental_ca_bound.pdb`.
+- Calcium-Ionen bleiben bei Calmodulin sichtbar, wenn **Ionen/Liganden anzeigen** aktiviert ist.
+- Wasser und Ethanol aus 1CLL werden herausgefiltert; Calcium-Ionen bleiben erhalten.
+- ColabFold-Workflow enthält nun auch die Calmodulin-Sequenz.
+- Optionale KI-/Vergleichsmodelle bleiben wie in v0.4.1 erhalten.
 
 ## Erwartete Strukturdateien
 
@@ -20,24 +21,30 @@ structures/
 │   ├── af2_best.pdb
 │   ├── af2_alternative.pdb
 │   └── didactic_decoy.pdb        # optional
-└── ubiquitin/
-    ├── experimental.pdb
+├── ubiquitin/
+│   ├── experimental.pdb
+│   ├── af2_best.pdb
+│   ├── af2_alternative.pdb
+│   └── didactic_decoy.pdb        # optional
+└── calmodulin/
+    ├── experimental_ca_bound.pdb
     ├── af2_best.pdb
     ├── af2_alternative.pdb
     └── didactic_decoy.pdb        # optional
 ```
 
-## Begriffe
+## Calmodulin-Sequenz für ColabFold
 
-- **beste Bewertung**: höchstbewertetes ColabFold-Modell
-- **Vergleichsmodell**: niedriger bewertetes ColabFold-Modell
-- **didaktisches Störmodell**: bewusst ausgewähltes oder erzeugtes Modell, das stärkere Abweichungen sichtbar macht; kein AlphaFold/ColabFold-Ergebnis
+Für den Vergleich mit 1CLL wird die 148-AS-Sequenz ohne zusätzliches N-terminales Methionin verwendet:
 
-Das didaktische Störmodell darf z. B. aus PEP-FOLD, QUARK, Phyre2, I-TASSER oder aus einer transparent künstlich veränderten Struktur stammen. Wichtig ist die klare Kennzeichnung.
+```text
+>calmodulin_1CLL_reference
+ADQLTEEQIAEFKEAFSLFDKDGDGTITTKELGTVMRSLGQNPTEAELQDMINEVDADGNGTIDFPEFLTMMARKMKDTDSEEEIREAFRVFDKDGNGYISAAELRHVMTNLGEKLTDEEVDEMIREADIDGDGQVNYEEFVQMMTAK
+```
 
 ## Update
 
-Für ein Update auf v0.4.1 mindestens ersetzen:
+Für ein Update auf v0.5.0 mindestens ersetzen:
 
 ```text
 index.html

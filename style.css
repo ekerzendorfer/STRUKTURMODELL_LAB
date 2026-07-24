@@ -333,6 +333,7 @@ body.viewer-expanded-active {
 .legend-swatch.pred { background: #EF6C00; }
 .legend-swatch.decoy { background: #7B1FA2; }
 .legend-swatch.diff { background: #D84315; }
+.legend-swatch.ion { background: #42A5F5; }
 .legend-note {
   color: var(--muted);
   flex-basis: 100%;

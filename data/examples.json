@@ -1,8 +1,8 @@
 {
   "meta": {
     "title": "KI-Strukturmodell-Labor",
-    "version": "0.4.1",
-    "description": "Version 0.4.1 ergänzt optional didaktische Störmodelle. Fehlt didactic_decoy.pdb, erscheint nur ein Hinweis; die App läuft weiter.",
+    "version": "0.5.0",
+    "description": "Version 0.5.0 ergänzt Calmodulin als drittes Beispiel: Sequenzmodell vs. Ca²⁺-gebundener experimenteller Zustand. Calcium-Ionen können sichtbar gemacht werden.",
     "model_note": "Die App lädt KI-Modelle nicht mehr über fragilen Remote-AFDB-Dateilink. Für Trp-cage und Ubiquitin sind lokale Pfade vorbereitet; die PDB-Dateien werden nach dem ColabFold-Lauf in structures/ abgelegt."
   },
   "examples": [
@@ -242,41 +242,117 @@
     {
       "id": "calmodulin",
       "title": "Calmodulin",
-      "subtitle": "später: Zustand, Ca²⁺ und AF3-Zusatzmodell",
-      "level": "Fortgeschritten / Fortbildung",
-      "status": "geplant: Zustand, Ca²⁺ und optional AF3-Zusatzmodell; v0.3.0 enthält bereits die didaktische Struktur für spätere Protokolle",
-      "core_message": "Proteinstruktur ist zustandsabhängig. Ca²⁺-Bindung verändert den biologisch relevanten Zustand.",
-      "intro": "Calmodulin wird später als Beispiel für Zustandsabhängigkeit ergänzt: ColabFold/AF2 aus der Sequenz, experimentelle Ca²⁺-Struktur und optional ein manuell erzeugtes AF3-Modell mit Calcium.",
-      "structures": [],
+      "subtitle": "Calcium-bindendes Protein – Zustand & Kontext",
+      "level": "Fortgeschritten / SEK2",
+      "status": "lokal vorbereitet · Ca²⁺-Zustand",
+      "core_message": "Ein KI-Modell aus der Sequenz beschreibt ein Proteinmodell; die experimentelle Struktur zeigt hier einen konkreten Ca²⁺-gebundenen Zustand. Unterschiede können daher auf fehlenden biologischen Kontext hinweisen.",
+      "intro": "Calmodulin ist ein Calcium-bindendes Signalprotein mit EF-Hand-Motiven. Es eignet sich, um den Unterschied zwischen Sequenzmodell, experimentellem Zustand und Cofaktor-/Ionenkontext sichtbar zu machen.",
+      "sequence": "ADQLTEEQIAEFKEAFSLFDKDGDGTITTKELGTVMRSLGQNPTEAELQDMINEVDADGNGTIDFPEFLTMMARKMKDTDSEEEIREAFRVFDKDGNGYISAAELRHVMTNLGEKLTDEEVDEMIREADIDGDGQVNYEEFVQMMTAK",
+      "showHeteroDefault": true,
+      "hetero_note": "Bei Calmodulin sind die Calcium-Ionen didaktisch zentral. Wasser und Ethanol werden ausgeblendet; Calcium bleibt als HETATM sichtbar.",
+      "structures": [
+        {
+          "id": "experiment",
+          "label": "Experiment: Calmodulin 1CLL, Ca²⁺-gebunden",
+          "role": "experiment",
+          "source": "local",
+          "file": "structures/calmodulin/experimental_ca_bound.pdb",
+          "url": "https://files.rcsb.org/download/1CLL.pdb",
+          "pdb_id": "1CLL",
+          "chain": "A",
+          "style": "cartoon",
+          "color": "#2E7D32",
+          "visibleByDefault": true,
+          "note": "Kristallstruktur von Calmodulin bei 1,70 Å mit vier Calcium-Ionen. Lokale Datei wird bevorzugt; RCSB dient nur als Fallback.",
+          "stripWater": true,
+          "keepHetero": [
+            "CA"
+          ]
+        },
+        {
+          "id": "prediction_best",
+          "label": "KI-Modell: ColabFold – beste Bewertung",
+          "shortLabel": "beste Bewertung",
+          "role": "prediction",
+          "variant": "best",
+          "source": "local_optional",
+          "file": "structures/calmodulin/af2_best.pdb",
+          "alignTo": "experiment",
+          "style": "cartoon",
+          "color": "#EF6C00",
+          "visibleByDefault": true,
+          "note": "Bestbewertetes ColabFold-Modell aus der Calmodulin-Sequenz. Es enthält keine expliziten Calcium-Ionen.",
+          "missingFileHint": "Bestbewertetes Calmodulin-KI-Modell noch nicht hinterlegt. Erwartet wird structures/calmodulin/af2_best.pdb.",
+          "stripWater": true
+        },
+        {
+          "id": "prediction_alternative",
+          "label": "KI-Modell: ColabFold – Vergleichsmodell",
+          "shortLabel": "Vergleichsmodell",
+          "role": "prediction",
+          "variant": "alternative",
+          "source": "local_optional",
+          "file": "structures/calmodulin/af2_alternative.pdb",
+          "alignTo": "experiment",
+          "style": "cartoon",
+          "color": "#F57C00",
+          "visibleByDefault": false,
+          "note": "Niedriger bewertetes ColabFold-Modell zur Diskussion von Modellqualität und Zustandsabhängigkeit.",
+          "missingFileHint": "Alternatives Calmodulin-KI-Modell noch nicht hinterlegt. Erwartet wird structures/calmodulin/af2_alternative.pdb.",
+          "stripWater": true
+        },
+        {
+          "id": "prediction_decoy",
+          "label": "Didaktisches Störmodell",
+          "shortLabel": "didaktisches Störmodell",
+          "role": "prediction",
+          "variant": "decoy",
+          "source": "local_optional",
+          "file": "structures/calmodulin/didactic_decoy.pdb",
+          "alignTo": "experiment",
+          "style": "cartoon",
+          "color": "#7B1FA2",
+          "visibleByDefault": false,
+          "note": "Optionales Vergleichsmodell, kein AlphaFold/ColabFold-Ergebnis.",
+          "missingFileHint": "Didaktisches Störmodell für Calmodulin noch nicht hinterlegt. Optional erwartet: structures/calmodulin/didactic_decoy.pdb.",
+          "stripWater": true,
+          "decoy": true
+        }
+      ],
       "views": {
-        "prediction": false,
-        "experiment": false,
-        "overlay": false,
-        "differences": false,
-        "af3": true,
-        "video": true
+        "prediction": true,
+        "experiment": true,
+        "overlay": true,
+        "differences": true,
+        "upload": true
       },
       "questions": [
-        "Warum beschreibt ein Sequenzmodell nicht automatisch den Ca²⁺-gebundenen Zustand?",
-        "Welche Information liefern Calcium-Ionen und experimentelle Strukturen zusätzlich?",
-        "Was könnte ein AF3-Modell gegenüber AF2/ColabFold ergänzen?"
+        "Welche Bereiche des Calmodulin-Modells stimmen gut mit der Ca²⁺-gebundenen experimentellen Struktur überein?",
+        "Wo weichen die Modelle stärker voneinander ab?",
+        "Warum kann ein Sequenzmodell ohne explizite Calcium-Ionen einen anderen Zustand zeigen als die experimentelle Struktur?"
       ],
-      "takeaway": "Calmodulin wird das zentrale Beispiel für den Unterschied zwischen Sequenzmodell, gebundenem Zustand und experimenteller Struktur.",
-      "future": {
-        "af2_colabfold_model": true,
-        "experimental_ca_bound_structure": true,
-        "af3_ca_model": true,
-        "video_link": true
-      },
-      "local_note": "Calmodulin bleibt in v0.2 bewusst nur als vorbereitete Erweiterungsstufe sichtbar.",
+      "takeaway": "Calmodulin zeigt besonders gut: Ein Strukturmodell ist immer auch eine Aussage über einen Zustand. Ionen, Liganden und Bindungspartner können entscheidend sein.",
+      "sources": [
+        {
+          "label": "RCSB PDB: 1CLL",
+          "url": "https://www.rcsb.org/structure/1CLL"
+        },
+        {
+          "label": "RCSB Download: 1CLL PDB",
+          "url": "https://files.rcsb.org/download/1CLL.pdb"
+        }
+      ],
+      "future": "Später kann eine Apo-Calmodulin-Struktur oder ein AF3-Modell mit Calcium ergänzt werden.",
+      "local_note": "v0.5.0 erwartet die lokale experimentelle Datei unter structures/calmodulin/experimental_ca_bound.pdb. Calcium-Ionen werden bei aktivierter Option „Ionen/Liganden anzeigen“ sichtbar; Wasser und Ethanol werden ausgeblendet.",
       "observation_prompts": [
-        "Vergleiche später AF2/ColabFold, experimentelle Ca²⁺-Struktur und optional AF3-Modell nicht als richtig/falsch, sondern als unterschiedliche Modellzustände.",
-        "Achte auf die Rolle von Calcium-Ionen: Sie sind kein dekoratives Detail, sondern Teil des biologisch relevanten Zustands.",
-        "Formuliere, warum eine Sequenz allein nicht automatisch alle Zustände eines Proteins beschreibt."
+        "Achte auf die langgestreckte, hantelförmige Gesamtform.",
+        "Schalte Ionen/Liganden ein und lokalisiere die Calcium-Ionen.",
+        "Vergleiche, ob die beiden Domänen und die zentrale Helix im KI-Modell gleich orientiert sind."
       ],
-      "model_limit": "Calmodulin ist zustandsabhängig. Ein AF2/ColabFold-Modell aus der Sequenz allein beschreibt nicht automatisch den Ca²⁺-gebundenen Zustand. AF3 kann zusätzlichen Kontext berücksichtigen, bleibt aber ebenfalls ein Modell.",
-      "protocol_focus": "Zustandsabhängigkeit: Proteinstruktur hängt von Ionen, Liganden und biologischem Kontext ab.",
-      "differenceThreshold": 2.0
+      "model_limit": "ColabFold/AF2 berechnet hier ein Modell aus der Aminosäuresequenz. Der experimentelle Vergleich zeigt dagegen einen konkreten Ca²⁺-gebundenen Zustand.",
+      "protocol_focus": "Beschreibe, welche Rolle Calcium-Ionen für die Interpretation des Strukturvergleichs spielen.",
+      "colab_url": "https://colab.research.google.com/github/ekerzendorfer/KI_STRUKTURMODELL_LAB/blob/main/colab/colabfold_template.ipynb",
+      "differenceThreshold": 3.0
     }
   ]
 }

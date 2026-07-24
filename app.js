@@ -1,8 +1,8 @@
-/* KI-Strukturmodell-Labor v0.4.1
+/* KI-Strukturmodell-Labor v0.5.0
    Schlanke GitHub-Pages-Webapp mit 3Dmol.js und datengetriebener Struktur.
-   v0.4.1: optionale didaktische Störmodelle. */
+   v0.5.0: Calmodulin als Ca²⁺-gebundenes Zustandsbeispiel. */
 
-const APP_VERSION = "0.4.1";
+const APP_VERSION = "0.5.0";
 let examplesData = null;
 let currentExample = null;
 let currentView = "overlay";
@@ -131,6 +131,7 @@ function selectExample(id) {
   renderQuestions(currentExample);
   renderGuidance(currentExample);
   renderPredictionSelector(currentExample);
+  if (els.showHetero) els.showHetero.checked = !!currentExample.showHeteroDefault;
   if (els.protocolOutput) els.protocolOutput.value = "";
   currentView = currentExample.views?.overlay ? "overlay" : "experiment";
   document.querySelectorAll(".viewBtn").forEach(btn => btn.classList.toggle("active", btn.dataset.view === currentView));
@@ -199,7 +200,7 @@ function generateProtocolText() {
   const selectedPredKind = selectedPredVariant === "decoy" ? "Gewähltes Vergleichsmodell" : "Gewähltes KI-Modell";
   const selectedPredLine = selectedPred ? `\n${selectedPredKind}: ${selectedPred.label || selectedPred.shortLabel || ""}\n` : "";
 
-  els.protocolOutput.value = `KI-Strukturmodell-Labor – Protokollhilfe\n\nBeispiel: ${currentExample.title}\nNiveau: ${currentExample.level || ""}\nKernaussage: ${currentExample.core_message || ""}${selectedPredLine}\nSequenz:\n${currentExample.sequence || "nicht hinterlegt"}\n\nAktuelle Ansicht: ${viewLabel}\nGeladene Struktur(en): ${activeStructures.length ? activeStructures.join(" | ") : "keine"}${alignment}\n\nBeobachtungsauftrag:\n${prompts || "keine Beobachtungsaufträge hinterlegt"}\n\nLeitfragen:\n${questions || "keine Leitfragen hinterlegt"}\n\nModellgrenze:\n${currentExample.model_limit || "noch nicht hinterlegt"}\n\nEigene Beobachtung:\n- \n\nBegründete Aussage:\nDieses Beispiel zeigt, dass ...\n\nMerksatz / Takeaway:\n${currentExample.takeaway || currentExample.protocol_focus || ""}\n`;
+  els.protocolOutput.value = `KI-Strukturmodell-Labor – Protokollhilfe\n\nBeispiel: ${currentExample.title}\nNiveau: ${currentExample.level || ""}\nKernaussage: ${currentExample.core_message || ""}${selectedPredLine}${currentExample.model_limit ? "\nModellgrenze: " + currentExample.model_limit + "\n" : ""}\nSequenz:\n${currentExample.sequence || "nicht hinterlegt"}\n\nAktuelle Ansicht: ${viewLabel}\nGeladene Struktur(en): ${activeStructures.length ? activeStructures.join(" | ") : "keine"}${alignment}\n\nBeobachtungsauftrag:\n${prompts || "keine Beobachtungsaufträge hinterlegt"}\n\nLeitfragen:\n${questions || "keine Leitfragen hinterlegt"}\n\nModellgrenze:\n${currentExample.model_limit || "noch nicht hinterlegt"}\n\nEigene Beobachtung:\n- \n\nBegründete Aussage:\nDieses Beispiel zeigt, dass ...\n\nMerksatz / Takeaway:\n${currentExample.takeaway || currentExample.protocol_focus || ""}\n`;
 }
 
 async function copyProtocolText() {
@@ -324,6 +325,7 @@ async function loadCurrentExample(force = false) {
       applyModelStyle(expModel, expStruct, "experiment");
       loadedModels.experiment = { model: expModel, pdb: expPdb, struct: expStruct };
       statusLines.push(`Experiment geladen: ${expStruct.label} (grün).`);
+      if (currentExample.hetero_note && els.showHetero?.checked) statusLines.push(currentExample.hetero_note);
     } catch (err) {
       warnLines.push(`Experiment nicht geladen: ${err.message}`);
     }
@@ -603,7 +605,19 @@ function preprocessPdb(pdb, struct) {
   if (struct.stripWater !== false) {
     lines = filterWater(lines);
   }
+  if (Array.isArray(struct.keepHetero) && struct.keepHetero.length) {
+    lines = filterHeteroNames(lines, struct.keepHetero);
+  }
   return lines.join("\n") + "\n";
+}
+
+function filterHeteroNames(lines, keepNames) {
+  const keep = new Set(keepNames.map(x => String(x).trim().toUpperCase()));
+  return lines.filter(line => {
+    if (!line.startsWith("HETATM")) return true;
+    const resn = line.slice(17, 20).trim().toUpperCase();
+    return keep.has(resn);
+  });
 }
 
 function filterWater(lines) {
@@ -703,8 +717,8 @@ function buildRepresentationStyle(color, opacity) {
 
 function buildHeteroStyle(color) {
   return {
-    stick: { colorscheme: "Jmol", radius: 0.18, opacity: 0.9 },
-    sphere: { colorscheme: "Jmol", scale: 0.35, opacity: 0.9 }
+    stick: { colorscheme: "Jmol", radius: 0.18, opacity: 0.88 },
+    sphere: { colorscheme: "Jmol", scale: 0.52, opacity: 0.92 }
   };
 }
 

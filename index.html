@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KI-Strukturmodell-Labor v0.4.1</title>
-  <link rel="stylesheet" href="style.css?v=0.4.1" />
+  <title>KI-Strukturmodell-Labor v0.5.0</title>
+  <link rel="stylesheet" href="style.css?v=0.5.0" />
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.4.2/3Dmol-min.js"></script>
 </head>
@@ -14,7 +14,7 @@
       <p class="eyebrow">CHEMIE mit KI · Mini-Tool</p>
       <h1>KI-Strukturmodell-Labor</h1>
       <p class="lead">Sequenz → KI-Strukturmodell → Experiment → Overlay → Modellgrenzen verstehen</p>
-      <p class="version">Version 0.4.1 · optionale didaktische Störmodelle</p>
+      <p class="version">Version 0.5.0 · Calmodulin & Ca²⁺-Zustand</p>
     </div>
   </header>
 
@@ -99,6 +99,7 @@
         <span class="legend-item"><span class="legend-swatch exp"></span>Experiment</span>
         <span class="legend-item"><span class="legend-swatch pred"></span>KI-Modell / ColabFold</span>
         <span class="legend-item"><span class="legend-swatch decoy"></span>didaktisches Störmodell</span>
+        <span class="legend-item"><span class="legend-swatch ion"></span>Calcium-Ionen / Liganden</span>
         <span class="legend-item"><span class="legend-swatch diff"></span>stärker abweichender Abschnitt</span>
         <span class="legend-note">Die Abweichungsmarkierung basiert auf Cα-Abständen und ist eine didaktische Orientierung.</span>
       </div>
@@ -136,10 +137,10 @@
 
   <footer class="wrap footer">
     <p>
-      v0.4.1 ergänzt optionale didaktische Störmodelle unter didactic_decoy.pdb. Fehlen diese Dateien, erscheint nur ein Hinweis; die Standardmodelle bleiben nutzbar.
+      v0.5.0 ergänzt Calmodulin als drittes Beispiel: Sequenzmodell im Vergleich mit einer Ca²⁺-gebundenen experimentellen Struktur. Calcium-Ionen können über „Ionen/Liganden anzeigen“ sichtbar gemacht werden.
     </p>
   </footer>
 
-  <script src="app.js?v=0.4.1"></script>
+  <script src="app.js?v=0.5.0"></script>
 </body>
 </html>
